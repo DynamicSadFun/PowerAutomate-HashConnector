@@ -18,6 +18,21 @@
     "/Hash": {
       "get": {
         "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "The server could not understand the request due to invalid syntax. Check your params and try it again."
+          },
+          "401": {
+            "description": "Authorization information is missing or invalid."
+          },
+          "404": {
+            "description": "The server can not find the requested resource. Maybe endpoint is valid but the resource itself does not exist. Check the requested function or contact your system administrator."
+          },
+          "500": {
+            "description": "Unexpected error."
+          },
           "default": {
             "description": "default",
             "schema": {}
@@ -88,6 +103,21 @@
           }
         ],
         "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "The server could not understand the request due to invalid syntax. Check your params and try it again."
+          },
+          "401": {
+            "description": "Authorization information is missing or invalid."
+          },
+          "404": {
+            "description": "The server can not find the requested resource. Maybe endpoint is valid but the resource itself does not exist. Check the requested function or contact your system administrator."
+          },
+          "500": {
+            "description": "Unexpected error."
+          },
           "default": {
             "description": "default",
             "schema": {}
