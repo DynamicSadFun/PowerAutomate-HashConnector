@@ -20,6 +20,9 @@
         "responses": {
           "200": {
             "description": "OK"
+            "schema": {
+              "type": "string"
+            }
           },
           "400": {
             "description": "The server could not understand the request due to invalid syntax. Check your params and try it again."
