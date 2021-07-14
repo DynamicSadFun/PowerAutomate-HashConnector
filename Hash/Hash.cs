@@ -13,14 +13,15 @@ using System.Threading.Tasks;
 
 namespace FunctionHash
 {
-    public class Result
-    {
-        public string hashType { get; set; }
-        public string message { get; set; }
-        public string hashValue { get; set; }
-    }
     public static class Hash
     {
+        /// <summary>
+        /// Byte array to hex-string 
+        /// C# has a native function BitConverter.ToString(result) 
+        /// But it does not always work correctly with outlandish encodings.
+        /// </summary>
+        /// <param name="result">Any byte array</param>
+        /// <returns>hash like an hexadecimal string</returns>
         public static string StrAppend(byte[] result)
         {
             StringBuilder strBuilder = new StringBuilder();
@@ -31,6 +32,11 @@ namespace FunctionHash
             return strBuilder.ToString();
         }
 
+        /// <summary>
+        /// RSA encrypt with fixed key
+        /// </summary>
+        /// <param name="text">the message you want to encrypt</param>
+        /// <returns>encrypt message</returns>
         public static string RSA(string text)
         {
             CspParameters CSApars = new CspParameters();
@@ -43,7 +49,11 @@ namespace FunctionHash
 
             return Convert.ToBase64String(byteEntry);
         }
-
+        /// <summary>
+        /// Sha256 hash algorithm
+        /// </summary>
+        /// <param name="text">the message you want to encrypt</param>
+        /// <returns>sha256 hash</returns>
         public static string SHA256Hash(string text)
         {
             var shaM = new SHA256Managed();
@@ -52,7 +62,11 @@ namespace FunctionHash
 
             return Hash.StrAppend(result);
         }
-
+        /// <summary>
+        /// Sha512 hash algorithm
+        /// </summary>
+        /// <param name="text">the message you want to encrypt</param>
+        /// <returns>sha512 hash</returns>
         public static string SHA512Hash(string text)
         {
             
@@ -63,6 +77,11 @@ namespace FunctionHash
             return Hash.StrAppend(result);
         }
 
+        /// <summary>
+        /// MD5 hash algorithm
+        /// </summary>
+        /// <param name="text">the message you want to encrypt</param>
+        /// <returns>MD5 hash</returns>
         public static string MD5Hash(string text)
         {
             MD5 md5 = new MD5CryptoServiceProvider();
@@ -71,10 +90,15 @@ namespace FunctionHash
 
             return Hash.StrAppend(result);
         }
-
+        /// <summary>
+        /// Converting binary data of any file into a string for its subsequent encryption
+        /// </summary>
+        /// <param name="request">HttpRequest with body params</param>
+        /// <returns>binary as a string</returns>
         private static async Task<string> ReadRequestBodyAsync(HttpRequest request)
         {
             string bodyAsText = string.Empty;
+            // We check if it is possible to run through the file as a content with binary data
             if (request.Body.CanSeek)
             {
                 request.Body.Seek(0, SeekOrigin.Begin);
@@ -85,6 +109,27 @@ namespace FunctionHash
             return bodyAsText;
         }
 
+
+        /// <summary>
+        /// Main function
+        /// </summary>
+        /// <returns>
+        /// Fixed length hash according to the chosen algorithm
+        /// </returns>
+        /// <example>
+        /// if you want to return json - just add it:
+        /// <code>
+        /// json = JsonConvert.SerializeObject(new
+        /// {
+        ///    results = new List<Result>()
+        ///    {
+        ///        new Result { hashType = hashtype, message = message, hashValue = responseMessage}
+        ///    }
+        /// });
+        /// log.LogInformation(json);
+        /// return new OkObjectResult(json);
+        /// </code>
+        /// </example> 
         [FunctionName("Hash")]
         public static async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
@@ -104,6 +149,7 @@ namespace FunctionHash
             string error = "Please pass a hashtype (md5/sha256/sha512/rsa) and the message which you want to encode in the request body";
             string responseMessage = string.Empty;
             var requestBodyContent = await Hash.ReadRequestBodyAsync(req);
+            // if body exists in the request then message is body else - just a message
             message = requestBodyContent != string.Empty ? requestBodyContent : message;
 
             try
@@ -122,37 +168,16 @@ namespace FunctionHash
                     default:
                         responseMessage = Hash.MD5Hash(message);
                         break;
-                }
-
-                // if you wanna json return
-                //json = JsonConvert.SerializeObject(new
-                //{
-                //    results = new List<Result>()
-                //    {
-                //        new Result { hashType = hashtype, message = message, hashValue = responseMessage}
-                //    }
-                //});
-                //return new OkObjectResult(json);
+                }                               
             }
             catch
             {
                 success = false;
-
-                // if you wanna json return
-                //json = JsonConvert.SerializeObject(new
-                //{
-                //    results = new List<Result>()
-                //    {
-                //        new Result { hashType = hashtype, message = message, hashValue = error}
-                //    }
-                //});
             }
-            log.LogInformation(json);
 
             return success
                 ? (ActionResult)new OkObjectResult(responseMessage)
                 : new BadRequestObjectResult(error);
-
         }
     }
 }
