@@ -8,10 +8,27 @@ https://powerusers.microsoft.com/t5/Power-Apps-Ideas/Function-to-encrypt-hash-sh
 Most likely, this problem has been solved privately many times, but no one has issued a public solution.
 I really hope that the functionality I suggested solves this problem.
 Azure Function was created that accepts get-post requests as input. We can pass it the hashing type (md5/sha256/sha512/rsa) and any message to the input, starting from text and ending with binary data (pictures, movies etc.), and at the output we get a string of fixed length.
+
+**Information for developers:**
 The code is written on C# language and can be easily improved. If you are missing encryption methods, just add them to this code similarly to the existing ones using the System.Security.Cryptography library.
-Further, this code must be published in your Cloud as an Azure Function. The instructions for publishing are here:
+Further, this code must be published in your Cloud as an Azure Function. The instructions about create new project and for publishing are here:
 
 https://docs.microsoft.com/en-us/azure/azure-functions/functions-create-your-first-function-visual-studio
+
+**Information for consultants:**
+Open the Result directory, grab the zip file from there and publish it to your cloud as follows:
+You can use Azure CLI to trigger a push deployment. Push deploy a .zip file to your function app by using the az functionapp deployment source config-zip command. To use this command, you must use Azure CLI version 2.0.21 or later. To see what Azure CLI version you are using, use the az --version command.
+
+In the following command, replace the <zip_file_path> placeholder with the path to the location of your .zip file. Also, replace <app_name> with the unique name of your function app and replace <resource_group> with the name of your resource group.
+```powershell
+az functionapp deployment source config-zip -g <resource_group> -n \
+<app_name> --src <zip_file_path>
+```
+This command deploys project files from the downloaded .zip file to your function app in Azure. It then restarts the app. To view the list of deployments for this function app, you must use the REST APIs.
+
+When you're using Azure CLI on your local computer, <zip_file_path> is the path to the .zip file on your computer. You can also run Azure CLI in Azure Cloud Shell. When you use Cloud Shell, you must first upload your deployment .zip file to the Azure Files account that's associated with your Cloud Shell. In that case, <zip_file_path> is the storage location that your Cloud Shell account uses. For more information, see this link:
+
+https://docs.microsoft.com/en-us/azure/azure-functions/deployment-zip-push#deployment-zip-file-requirements
 
 Immediately after the publication of the function, it can already be used through the HTTP:
 
