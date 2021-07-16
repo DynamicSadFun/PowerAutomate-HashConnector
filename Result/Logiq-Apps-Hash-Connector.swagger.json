@@ -1,0 +1,145 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Logiq Apps Hash Connector",
+    "description": "",
+    "version": "1.0"
+  },
+  "host": "functionhashbylogiqapps.azurewebsites.net",
+  "basePath": "/api/",
+  "schemes": [
+    "https"
+  ],
+  "consumes": [
+    "multipart/form-data"
+  ],
+  "produces": [],
+  "paths": {
+    "/Hash": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "The server could not understand the request due to invalid syntax. Check your params and try it again."
+          },
+          "401": {
+            "description": "Authorization information is missing or invalid."
+          },
+          "404": {
+            "description": "The server can not find the requested resource. Maybe endpoint is valid but the resource itself does not exist. Check the requested function or contact your system administrator."
+          },
+          "500": {
+            "description": "Unexpected error."
+          },
+          "default": {
+            "description": "default",
+            "schema": {}
+          }
+        },
+        "summary": "Return hash value by any message",
+        "description": "Mathematical algorithm that maps data of arbitrary size (often called the \"message\") to a bit array of a fixed size (the \"hash value\", \"hash\", or \"message digest\")",
+        "operationId": "Hash",
+        "x-ms-visibility": "important",
+        "parameters": [
+          {
+            "name": "message",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "x-ms-visibility": "important",
+            "description": "Message for encrypt"
+          },
+          {
+            "name": "hashtype",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "default": "md5",
+            "description": "Please pass a hashtype (md5/sha256/sha512/rsa) and the message which you want to encode in the request body",
+            "x-ms-visibility": "important",
+            "enum": [
+              "md5",
+              "sha256",
+              "sha512",
+              "rsa (with fixed key)"
+            ],
+            "format": ""
+          }
+        ]
+      },
+      "post": {
+        "summary": "Uploads a file which you want to encrypt",
+        "description": "Mathematical algorithm that maps data of arbitrary size (often called the \"message\") to a bit array of a fixed size (the \"hash value\", \"hash\", or \"message digest\")",
+        "operationId": "HashBinary",
+        "x-ms-visibility": "important",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "parameters": [
+          {
+            "name": "hashtype",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "default": "md5",
+            "description": "Please pass a hashtype (md5/sha256/sha512/rsa) and the message which you want to encode in the request body",
+            "x-ms-visibility": "important",
+            "enum": [
+              "md5",
+              "sha256",
+              "sha512",
+              "rsa (with fixed key)"
+            ],
+            "format": ""
+          },
+          {
+            "in": "formData",
+            "name": "file",
+            "type": "file",
+            "required": true,
+            "description": "The file to upload."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "The server could not understand the request due to invalid syntax. Check your params and try it again."
+          },
+          "401": {
+            "description": "Authorization information is missing or invalid."
+          },
+          "404": {
+            "description": "The server can not find the requested resource. Maybe endpoint is valid but the resource itself does not exist. Check the requested function or contact your system administrator."
+          },
+          "500": {
+            "description": "Unexpected error."
+          },
+          "default": {
+            "description": "default",
+            "schema": {}
+          }
+        }
+      }
+    }
+  },
+  "definitions": {},
+  "parameters": {},
+  "responses": {},
+  "securityDefinitions": {
+    "API Key": {
+      "type": "apiKey",
+      "in": "query",
+      "name": "code"
+    }
+  },
+  "security": [
+    {
+      "API Key": []
+    }
+  ],
+  "tags": []
+}
