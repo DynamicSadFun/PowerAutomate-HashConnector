@@ -48,7 +48,7 @@ Take the code of my connector (swagger.json), change host name:
     "description": "",
     "version": "1.1"
   },
-  "**host**": "**YOURHOST**",
+  "host": "YOURHOST",
   "basePath": "/api/"
 ```
 and publish it. 
