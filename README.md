@@ -1,5 +1,7 @@
 # PowerAutomate-HashConnector
 
+![image](https://user-images.githubusercontent.com/86048404/126144714-2ee0eeca-eb28-4672-94e2-7a3d29d70f08.png)
+
 Cryptographic hash functions are an indispensable and ubiquitous tool used to perform a variety of tasks, including authentication, data integrity checking, protecting files, passwords, and even malware detection.
 For several years, the application for this functionality lay on the powerapps-community as an idea:
 
@@ -32,16 +34,24 @@ https://docs.microsoft.com/en-us/azure/azure-functions/deployment-zip-push#deplo
 
 Immediately after the publication of the function, it can already be used through the HTTP:
 
-![image](https://user-images.githubusercontent.com/86048404/125761379-5e2abd3c-c281-4b0b-8f91-9f873f4fca68.png)
+![image](https://user-images.githubusercontent.com/86048404/126145124-9f5bd509-932f-4641-91e1-e3532364b7a2.png)
 
 But for Power Automate, this is not enough. We need to create a custom connector that will perform the required transformations. The instructions for creating a connector are here, but you don't need to follow most of these steps: 
 
 https://docs.microsoft.com/en-us/connectors/custom-connectors/define-blank#:~:text=Power%20Apps-,Start%20the%20custom%20connector%20wizard,custom%20connector%2C%20then%20select%20Continue.
 
-Take the code of my connector (swagger.json) and publish it.
+Take the code of my connector (swagger.json), change host name:
+```json
+swagger: '2.0'
+info: {title: Logiq Apps Hash Connector, description: '', version: '1.0'}
+host: YOURHOST
+basePath: /api/
+schemes: [https]
+```
+and publish it. 
 In general, that's all. Use this functionality in your Power Automate to encrypt messages and files, store the hashes as you see fit:
 
-![image](https://user-images.githubusercontent.com/86048404/125761522-9af8fe86-8036-4085-8068-3f7e676400ee.png)
+![image](https://user-images.githubusercontent.com/86048404/126145202-4bfd3997-0685-49d0-9d36-5473cf655b2d.png)
 
 As you can see, the functionality is very simple, but quite effective. Of course, there are nuances (cons) in it. Unfortunately I am not an expert in Power Automate (yet), and therefore your comments and  suggestions will be very useful.
 Good luck with your use!
