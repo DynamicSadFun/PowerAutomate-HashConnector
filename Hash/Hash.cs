@@ -1,13 +1,13 @@
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
 using System.IO;
-using System.Collections.Generic;
 using System.Security.Cryptography;
+using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -48,6 +48,19 @@ namespace FunctionHash
             byte[] byteEntry = rsa.Encrypt(byteText, false);
 
             return Convert.ToBase64String(byteEntry);
+        }
+        /// <summary>
+        /// Sha1 hash algorithm
+        /// </summary>
+        /// <param name="text">the message you want to encrypt</param>
+        /// <returns>sha1 hash</returns>
+        public static string SHA1Hash(string text)
+        {
+            var shaM = new SHA1Managed();
+            shaM.ComputeHash(ASCIIEncoding.ASCII.GetBytes(text));
+            byte[] result = shaM.Hash;
+
+            return Hash.StrAppend(result);
         }
         /// <summary>
         /// Sha256 hash algorithm
@@ -109,29 +122,14 @@ namespace FunctionHash
             return bodyAsText;
         }
 
-
         /// <summary>
         /// Main function
         /// </summary>
         /// <returns>
         /// Fixed length hash according to the chosen algorithm
         /// </returns>
-        /// <example>
-        /// if you want to return json - just add it:
-        /// <code>
-        /// json = JsonConvert.SerializeObject(new
-        /// {
-        ///    results = new List<Result>()
-        ///    {
-        ///        new Result { hashType = hashtype, message = message, hashValue = responseMessage}
-        ///    }
-        /// });
-        /// log.LogInformation(json);
-        /// return new OkObjectResult(json);
-        /// </code>
-        /// </example> 
         [FunctionName("Hash")]
-        public static async Task<IActionResult> Run(
+        public static async Task<HttpResponseMessage> Run(
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
             ILogger log)
         {
@@ -142,11 +140,10 @@ namespace FunctionHash
             log.LogInformation("AuthenticationType: {authenticationType}",
                 identity?.AuthenticationType);
 
-            var success = true;
             string json = string.Empty;
             string message = req.Query["message"];
             string hashtype = req.Query["hashtype"];
-            string error = "Please pass a hashtype (md5/sha256/sha512/rsa) and the message which you want to encode in the request body";
+            string error = "Please pass a hashtype (md5/sha1/sha256/sha512/rsa) and the message which you want to encode in the request body";
             string responseMessage = string.Empty;
             var requestBodyContent = await Hash.ReadRequestBodyAsync(req);
             // if body exists in the request then message is body else - just a message
@@ -156,6 +153,9 @@ namespace FunctionHash
             {
                 switch (hashtype)
                 {
+                    case "sha1":
+                        responseMessage = Hash.SHA1Hash(message);
+                        break;
                     case "sha256":
                         responseMessage = Hash.SHA256Hash(message);
                         break;
@@ -168,16 +168,19 @@ namespace FunctionHash
                     default:
                         responseMessage = Hash.MD5Hash(message);
                         break;
-                }                               
+                }
+                json = JsonConvert.SerializeObject(new Result { hashType = hashtype, message = message, hashValue = responseMessage });
+
             }
             catch
             {
-                success = false;
+                json = JsonConvert.SerializeObject(new Result { hashType = hashtype, message = message, hashValue = error });
             }
-
-            return success
-                ? (ActionResult)new OkObjectResult(responseMessage)
-                : new BadRequestObjectResult(error);
+            log.LogInformation(json);
+            return new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                Content = new StringContent(json, Encoding.UTF8, "application/json")
+            };
         }
     }
 }
