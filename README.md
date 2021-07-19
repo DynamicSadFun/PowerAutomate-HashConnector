@@ -42,11 +42,14 @@ https://docs.microsoft.com/en-us/connectors/custom-connectors/define-blank#:~:te
 
 Take the code of my connector (swagger.json), change host name:
 ```json
-swagger: '2.0'
-info: {title: Logiq Apps Hash Connector, description: '', version: '1.0'}
-host: YOURHOST
-basePath: /api/
-schemes: [https]
+ "swagger": "2.0",
+  "info": {
+    "title": "Logiq Apps Hash Connector",
+    "description": "",
+    "version": "1.1"
+  },
+  "host": "functionhashbylogiqapps.azurewebsites.net",
+  "basePath": "/api/"
 ```
 and publish it. 
 In general, that's all. Use this functionality in your Power Automate to encrypt messages and files, store the hashes as you see fit:
