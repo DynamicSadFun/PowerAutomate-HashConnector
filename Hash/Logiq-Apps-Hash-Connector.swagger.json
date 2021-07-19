@@ -19,9 +19,23 @@
       "get": {
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
             "schema": {
-              "type": "string"
+              "type": "object",
+              "properties": {
+                "hashType": {
+                  "type": "string",
+                  "description": "hashType"
+                },
+                "message": {
+                  "type": "string",
+                  "description": "message"
+                },
+                "hashValue": {
+                  "type": "string",
+                  "description": "hashValue"
+                }
+              }
             }
           },
           "400": {
@@ -38,7 +52,23 @@
           },
           "default": {
             "description": "default",
-            "schema": {}
+            "schema": {
+              "type": "object",
+              "properties": {
+                "hashType": {
+                  "type": "string",
+                  "description": "hashType"
+                },
+                "message": {
+                  "type": "string",
+                  "description": "message"
+                },
+                "hashValue": {
+                  "type": "string",
+                  "description": "hashValue"
+                }
+              }
+            }
           }
         },
         "summary": "Return hash value by any message",
@@ -64,6 +94,7 @@
             "x-ms-visibility": "important",
             "enum": [
               "md5",
+              "sha1",
               "sha256",
               "sha512",
               "rsa (with fixed key)"
@@ -91,6 +122,7 @@
             "x-ms-visibility": "important",
             "enum": [
               "md5",
+              "sha1",
               "sha256",
               "sha512",
               "rsa (with fixed key)"
@@ -107,7 +139,24 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "hashType": {
+                  "type": "string",
+                  "description": "hashType"
+                },
+                "message": {
+                  "type": "string",
+                  "description": "message"
+                },
+                "hashValue": {
+                  "type": "string",
+                  "description": "hashValue"
+                }
+              }
+            }
           },
           "400": {
             "description": "The server could not understand the request due to invalid syntax. Check your params and try it again."
@@ -123,7 +172,23 @@
           },
           "default": {
             "description": "default",
-            "schema": {}
+            "schema": {
+              "type": "object",
+              "properties": {
+                "hashType": {
+                  "type": "string",
+                  "description": "hashType"
+                },
+                "message": {
+                  "type": "string",
+                  "description": "message"
+                },
+                "hashValue": {
+                  "type": "string",
+                  "description": "hashValue"
+                }
+              }
+            }
           }
         }
       }
@@ -146,4 +211,3 @@
   ],
   "tags": []
 }
-
