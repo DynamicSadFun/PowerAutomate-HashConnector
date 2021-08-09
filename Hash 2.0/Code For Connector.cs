@@ -1,7 +1,6 @@
 public class Script : ScriptBase
 {
 	private static readonly Regex _regex = new Regex(@"[?&](\w[\w.]*)=([^?&]+)");
-
 	public static IReadOnlyDictionary<string, string> ParseQueryString(Uri uri)
 	{
 		var match = _regex.Match(uri.PathAndQuery);
@@ -21,8 +20,7 @@ public class Script : ScriptBase
 
 	private async Task<HttpResponseMessage> HandleHashOperation()
 	{
-        string responseMessage = string.Empty;
-        //System.Threading.Thread.Sleep(2000);
+        	string responseMessage = string.Empty;
 		HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.OK);
 		var queryString = ParseQueryString(this.Context.Request.RequestUri);
 		var message = queryString.First(x => x.Key == "message").Value;
