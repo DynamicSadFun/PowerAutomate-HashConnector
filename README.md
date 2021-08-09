@@ -1,5 +1,7 @@
 # PowerAutomate-HashConnector
 
+**UPDATE, VERSION 2.0 WITHOUT AZURE FUNCTION (SEE BELOW)**
+
 ![image](https://user-images.githubusercontent.com/86048404/126144714-2ee0eeca-eb28-4672-94e2-7a3d29d70f08.png)
 
 Cryptographic hash functions are an indispensable and ubiquitous tool used to perform a variety of tasks, including authentication, data integrity checking, protecting files, passwords, and even malware detection.
@@ -58,3 +60,21 @@ In general, that's all. Use this functionality in your Power Automate to encrypt
 
 As you can see, the functionality is very simple, but quite effective. Of course, there are nuances (cons) in it. Unfortunately I am not an expert in Power Automate (yet), and therefore your comments and  suggestions will be very useful.
 Good luck with your use!
+
+**UPDATE, VERSION 2.0 WITHOUT AZURE FUNCTION**
+
+Just import Logiq-Apps-Hash-Connector-Code.swagger.json into your system like a new custom connector, open your connector, go to step 4 and click "Upload". 
+Select the "Code For Connector.cs" code that will intercept the call and transform it in a way that suits you:
+
+![image](https://user-images.githubusercontent.com/86048404/128698177-e83646dc-e866-4b80-8a08-816a79fd3ef4.png)
+
+Be sure to select the step (action) that will initiate the code execution!
+Save the connector. Use and have fun:
+
+![image](https://user-images.githubusercontent.com/86048404/128698614-05e29dff-94c3-453f-87b2-a7b2ef38a989.png)
+
+
+P.S. Be careful! This functionality is in the preview and can be changed at any time, or even completely disabled.
+The first version with an azure function, although more complex and heavyweight, is more reliable and can be used in production right now.
+
+
