@@ -1,0 +1,113 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Logiq Apps Hash Connector Code",
+    "description": "Custom connector with dummy request to generate Hash based on .Net Cryptography",
+    "version": "1.0"
+  },
+  "host": "logiqapps.com",
+  "basePath": "/v1/bpi/",
+  "schemes": [
+    "https"
+  ],
+  "consumes": [
+    "multipart/form-data"
+  ],
+  "produces": [],
+  "paths": {
+    "/Hash": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "hashType": {
+                  "type": "string",
+                  "description": "hashType"
+                },
+                "message": {
+                  "type": "string",
+                  "description": "message"
+                },
+                "hashValue": {
+                  "type": "string",
+                  "description": "hashValue"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The server could not understand the request due to invalid syntax. Check your params and try it again."
+          },
+          "401": {
+            "description": "Authorization information is missing or invalid."
+          },
+          "404": {
+            "description": "The server can not find the requested resource. Maybe endpoint is valid but the resource itself does not exist. Check the requested function or contact your system administrator."
+          },
+          "500": {
+            "description": "Unexpected error."
+          },
+          "default": {
+            "description": "default",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "hashType": {
+                  "type": "string",
+                  "description": "hashType"
+                },
+                "message": {
+                  "type": "string",
+                  "description": "message"
+                },
+                "hashValue": {
+                  "type": "string",
+                  "description": "hashValue"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Return hash value by any message",
+        "description": "Mathematical algorithm that maps data of arbitrary size (often called the \"message\") to a bit array of a fixed size (the \"hash value\", \"hash\", or \"message digest\")",
+        "operationId": "Hash",
+        "x-ms-visibility": "important",
+        "parameters": [
+          {
+            "name": "message",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "x-ms-visibility": "important",
+            "description": "Message for encrypt"
+          },
+          {
+            "name": "hashtype",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "default": "md5",
+            "description": "Please pass a hashtype (md5/sha1/sha256/sha512) and the message which you want to encode in the request body",
+            "x-ms-visibility": "important",
+            "enum": [
+              "md5",
+              "sha1",
+              "sha256",
+              "sha512"
+            ],
+            "format": ""
+          }
+        ]
+      }
+    }
+  },
+  "definitions": {},
+  "parameters": {},
+  "responses": {},
+  "securityDefinitions": {},
+  "security": [],
+  "tags": []
+}
